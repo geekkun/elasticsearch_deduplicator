@@ -5,6 +5,6 @@ Python script aggregates duplicate docs in an index and removes all except the f
 ```
 PUT your_index_name/_settings
 {
-  "max_result_window" : 1000 
+  "max_inner_result_window" : 1000 
 }
 ```
