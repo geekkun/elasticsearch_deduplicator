@@ -4,6 +4,7 @@ es = Elasticsearch(["localhost:9200"]) #replace host and port with your data
 
 # terms_size and top_hits_size can be up to 100; higher values lead to Read timed out exception
 # index.max_inner_result_window should be changed to increase size of top_hits_size, otherwise 100 is max for top_hits_size
+# if 100 for terms_size and top_hits_size fails, try to decrease number a bit (e.g. 99 for both can work, depends on your server)
 def find_docs(index, doc_type, terms_size, top_hits_size):
   result = es.search(
     index=index, 
