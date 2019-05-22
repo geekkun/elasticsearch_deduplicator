@@ -48,20 +48,22 @@ def get_docs(index, doc_type, terms_size, top_hits_size):
 def delete_duplicates(index, doc_type, result):
   for res in result:
     keys = res['duplicateDocuments']['hits']['hits']
-    for key_id in keys[1:]:
+    
+    for key_id in keys[1:]: # [1:] <- first one is skipped, so it will be kept
         print(es.delete(index=index, doc_type=doc_type, id=key_id['_id']))
         
 def main():
-    v5 = get_docs()
+    documents = get_docs()
     jobs = []
-    for res in v5:
-        keys = res['duplicateDocuments']['hits']['hits']
+    for docs in documents:
+        keys = docs['duplicateDocuments']['hits']['hits']
         proc = Process(target=mp_delete_duplicates, args=('signal_v5', 'info', keys), daemon=True)
         jobs.append(proc)
     for j in jobs:
         j.start()
+        
 def mp_delete_duplicates(index, doc_type, keys):
-    for key_id in keys[1:]:
+    for key_id in keys[1:]: # [1:] <- first one is skipped, so it will be kept
         try:
             print(es.delete(index=index, doc_type=doc_type, id=key_id['_id']))
         except Exception as e:
