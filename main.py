@@ -52,6 +52,13 @@ def delete_duplicates(index, doc_type, result):
     for key_id in keys[1:]: # [1:] <- first one is skipped, so it will be kept
         print(es.delete(index=index, doc_type=doc_type, id=key_id['_id']))
         
+def mp_delete_duplicates(index, doc_type, keys):
+    for key_id in keys[1:]: # [1:] <- first one is skipped, so it will be kept
+        try:
+            print(es.delete(index=index, doc_type=doc_type, id=key_id['_id']))
+        except Exception as e:
+            print(e)
+        
 def main():
     documents = get_docs()
     jobs = []
@@ -61,10 +68,6 @@ def main():
         jobs.append(proc)
     for j in jobs:
         j.start()
+    
         
-def mp_delete_duplicates(index, doc_type, keys):
-    for key_id in keys[1:]: # [1:] <- first one is skipped, so it will be kept
-        try:
-            print(es.delete(index=index, doc_type=doc_type, id=key_id['_id']))
-        except Exception as e:
-            print(e)
+
